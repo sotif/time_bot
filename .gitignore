@@ -1,0 +1,5 @@
+bot
+*.sqlite
+*.o
+*.log
+config.json
