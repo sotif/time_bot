@@ -8,6 +8,7 @@
 #include "log.h"
 
 #define GUILD_ID 123456789012345678 //add your GUILD_ID here
+struct timespec start, end;
 
 int string_to_epoch(char* date, char* time, char* timezone, int* result, char errmsg[])
 {
@@ -84,12 +85,24 @@ void on_interaction(struct discord *client, const struct discord_interaction *ev
 	}
 
 	if (strcmp(event->data->name, "info") == 0) {
+		clock_gettime(CLOCK_REALTIME, &end);
+		char buf[DISCORD_MAX_MESSAGE_LEN] = "";
+		long int uptime = end.tv_sec - start.tv_sec;
+		long int hours = uptime / 3600L;
+		long int minutes = (uptime - (3600L*hours))/ 60L;
+		long int seconds = (uptime - (3600L*hours)-(60L*minutes));
+		snprintf(buf, sizeof(buf),
+				"Hi! I am a bot written in C.\n"
+				"I convert time.\n"
+				"I live here: <https://github.com/sotif/time_bot>\n"
+				"I have been awake for %02ld:%02ld:%02ld\n"
+				, hours, minutes, seconds
+			);
+
 		struct discord_interaction_response params = {
 			.type = DISCORD_INTERACTION_CHANNEL_MESSAGE_WITH_SOURCE,
 			.data = &(struct discord_interaction_callback_data){
-				.content =
-					"Hi! I am a bot written in C. "
-					"I convert time."
+				.content = buf
 			}
 		};
 		discord_create_interaction_response(client, event->id, event->token, &params, NULL);
@@ -171,7 +184,7 @@ void on_ready(struct discord *client, const struct discord_ready *event)
 
 	struct discord_create_guild_application_command params_info = {
 		.name = "info",
-		.description = "bot info."
+		.description = "Shows info about the bot."
 	};
 	discord_create_guild_application_command(client, event->application->id, GUILD_ID, &params_info, NULL);
 
@@ -277,6 +290,8 @@ int main(int argc, char** argv)
 	} else {
 		config_file = "./config.json";
 	}
+
+	clock_gettime(CLOCK_REALTIME, &start);
 
 	ccord_global_init();
 	struct discord *client = discord_config_init(config_file);
