@@ -175,19 +175,19 @@ void on_interaction(struct discord *client, const struct discord_interaction *ev
 		char buf[DISCORD_MAX_MESSAGE_LEN] = "";
 
 		if( strcmp(type, "short time") == 0 ) {
-			snprintf(buf, sizeof(buf), "<t:%d:t>", epoch);
+			snprintf(buf, sizeof(buf), "<t:%d:t>```<t:%d:t>```", epoch, epoch);
 		} else if ( strcmp(type, "long time") == 0) {
-			snprintf(buf, sizeof(buf), "<t:%d:T>", epoch);
+			snprintf(buf, sizeof(buf), "<t:%d:T>```<t:%d:T>```", epoch, epoch);
 		} else if ( strcmp(type, "short date") == 0) {
-			snprintf(buf, sizeof(buf), "<t:%d:d>", epoch);
+			snprintf(buf, sizeof(buf), "<t:%d:d>```<t:%d:d>```", epoch, epoch);
 		} else if ( strcmp(type, "long date") == 0) {
-			snprintf(buf, sizeof(buf), "<t:%d:D>", epoch);
+			snprintf(buf, sizeof(buf), "<t:%d:D>```<t:%d:D>```", epoch, epoch);
 		} else if ( strcmp(type, "long date with short time") == 0) {
-			snprintf(buf, sizeof(buf), "<t:%d:f>", epoch);
+			snprintf(buf, sizeof(buf), "<t:%d:f>```<t:%d:f>```", epoch, epoch);
 		} else if ( strcmp(type, "long date with day of week and short time") == 0) {
-			snprintf(buf, sizeof(buf), "<t:%d:F>", epoch);
+			snprintf(buf, sizeof(buf), "<t:%d:F>```<t:%d:F>```", epoch, epoch);
 		} else if ( strcmp(type, "relative") == 0) {
-			snprintf(buf, sizeof(buf), "<t:%d:R>", epoch);
+			snprintf(buf, sizeof(buf), "<t:%d:R>```<t:%d:R>```", epoch, epoch);
 		}
 
 
