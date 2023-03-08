@@ -295,7 +295,7 @@ void on_ready(struct discord *client, const struct discord_ready *event)
 
 	struct discord_create_guild_application_command params = {
 		.name = "time",
-		.description = "A command with the slash thing",
+		.description = "Get formated timestamp message.",
 		.default_permission = true,
 		.options =
 			&(struct discord_application_command_options) {
