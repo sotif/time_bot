@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "discord.h"
+#include "discord-internal.h"
 #include "log.h"
 
 #define GUILD_ID 123456789012345678 //add your GUILD_ID here
@@ -92,13 +93,24 @@ void on_interaction(struct discord *client, const struct discord_interaction *ev
 		long int hours = (uptime - 86400L * days) / 3600L;
 		long int minutes = (uptime - 86400L * days - 3600L * hours)/ 60L;
 		long int seconds = (uptime - 86400L * days - 3600L * hours - 60L * minutes);
+
+		/* Total shards */
+		int shards_count;
+		shards_count = client->gw.session->shards;
+
+		/* shard ping */
+		int shard_ping;
+		shard_ping = discord_get_ping(client);
+
 		snprintf(buf, sizeof(buf),
 				"Hi! I am a simple bot written in **C**.\n"
 				"I convert time.\n"
 				"\n"
 				"**I live here**: <https://github.com/sotif/time_bot>\n"
 				"**Uptime**: %02ld day(s), %02ld hours, %02ld minutes, %02ld seconds\n"
-				, days, hours, minutes, seconds
+				"**Total shards**: %d\n"
+				"**Shard ping**: %d ms\n"
+				, days, hours, minutes, seconds, shards_count, shard_ping
 			);
 
 		struct discord_embed embed = {
