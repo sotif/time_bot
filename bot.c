@@ -93,19 +93,33 @@ void on_interaction(struct discord *client, const struct discord_interaction *ev
 		long int minutes = (uptime - 86400L * days - 3600L * hours)/ 60L;
 		long int seconds = (uptime - 86400L * days - 3600L * hours - 60L * minutes);
 		snprintf(buf, sizeof(buf),
-				"Hi! I am a bot written in C.\n"
+				"Hi! I am a simple bot written in **C**.\n"
 				"I convert time.\n"
+				"\n"
+				"**I live here**: <https://github.com/sotif/time_bot>\n"
 				"**Uptime**: %02ld day(s), %02ld hours, %02ld minutes, %02ld seconds\n"
 				, days, hours, minutes, seconds
 			);
 
+		struct discord_embed embed = {
+			.color = 0x1E00FF,
+			.timestamp = discord_timestamp(client),
+		};
+		discord_embed_set_title(&embed, "Bot info");
+		discord_embed_set_description(&embed, buf);
+
+
 		struct discord_interaction_response params = {
 			.type = DISCORD_INTERACTION_CHANNEL_MESSAGE_WITH_SOURCE,
 			.data = &(struct discord_interaction_callback_data){
-				.content = buf
+				.embeds = &(struct discord_embeds) {
+					.size = 1,
+					.array = &embed,
+				},
 			}
 		};
 		discord_create_interaction_response(client, event->id, event->token, &params, NULL);
+		discord_embed_cleanup(&embed);
 		return;
 	}
 
