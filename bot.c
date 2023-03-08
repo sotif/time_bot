@@ -8,7 +8,6 @@
 #include "discord-internal.h"
 #include "log.h"
 
-#define GUILD_ID 123456789012345678 //add your GUILD_ID here
 struct timespec start, end;
 
 int string_to_epoch(char* date, char* time, char* timezone, int* result, char errmsg[])
@@ -208,11 +207,11 @@ void on_ready(struct discord *client, const struct discord_ready *event)
 			event->user->username, event->user->discriminator
 		);
 
-	struct discord_create_guild_application_command params_info = {
+	struct discord_create_global_application_command params_info = {
 		.name = "info",
 		.description = "Shows info about the bot."
 	};
-	discord_create_guild_application_command(client, event->application->id, GUILD_ID, &params_info, NULL);
+	discord_create_global_application_command(client, event->application->id, &params_info, NULL);
 
 	struct discord_application_command_option_choice timezone_type_choices[] = {
 		{
@@ -293,7 +292,7 @@ void on_ready(struct discord *client, const struct discord_ready *event)
 		},
 	};
 
-	struct discord_create_guild_application_command params = {
+	struct discord_create_global_application_command params = {
 		.name = "time",
 		.description = "Get formated timestamp message.",
 		.default_permission = true,
@@ -304,7 +303,7 @@ void on_ready(struct discord *client, const struct discord_ready *event)
 			},
 
 	};
-	discord_create_guild_application_command(client, event->application->id, GUILD_ID, &params, NULL);
+	discord_create_global_application_command(client, event->application->id, &params, NULL);
 }
 
 int main(int argc, char** argv)
