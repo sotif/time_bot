@@ -88,15 +88,15 @@ void on_interaction(struct discord *client, const struct discord_interaction *ev
 		clock_gettime(CLOCK_REALTIME, &end);
 		char buf[DISCORD_MAX_MESSAGE_LEN] = "";
 		long int uptime = end.tv_sec - start.tv_sec;
-		long int hours = uptime / 3600L;
-		long int minutes = (uptime - (3600L*hours))/ 60L;
-		long int seconds = (uptime - (3600L*hours)-(60L*minutes));
+		long int days = uptime / 86400L;
+		long int hours = (uptime - 86400L * days) / 3600L;
+		long int minutes = (uptime - 86400L * days - 3600L * hours)/ 60L;
+		long int seconds = (uptime - 86400L * days - 3600L * hours - 60L * minutes);
 		snprintf(buf, sizeof(buf),
 				"Hi! I am a bot written in C.\n"
 				"I convert time.\n"
-				"I live here: <https://github.com/sotif/time_bot>\n"
-				"I have been awake for %02ld:%02ld:%02ld\n"
-				, hours, minutes, seconds
+				"**Uptime**: %02ld day(s), %02ld hours, %02ld minutes, %02ld seconds\n"
+				, days, hours, minutes, seconds
 			);
 
 		struct discord_interaction_response params = {
